@@ -35,9 +35,12 @@ ln -s /usr/lib/python2.7/site-packages/hashivault_vars/hashivault_vars.py \
 ```
 
 ## Vault Secret Paths
-Root path in vault:
+Default root path in vault:
 
-* `/secret/ansible/`
+* `/secret/ansible`
+
+The root path in vault can be changed by setting the
+`HASHIVAULT_VARS_SECRET_ROOT` environment variable.
 
 Precendence (applied top to bottom, so last takes precendence):
 * Groups:

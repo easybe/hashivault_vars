@@ -39,8 +39,11 @@ class VarsModule(BaseVarsPlugin):
     """
     Hashicorp Vault Vars Plugin.
 
-    Root path in vault:
-        /secret/ansible/
+    Default root path in vault:
+        /secret/ansible
+
+    The root path in vault can be changed by setting the
+    HASHIVAULT_VARS_SECRET_ROOT environment variable.
 
     Precendence (applied top to bottom, so last takes precendence):
         Groups:
@@ -93,6 +96,9 @@ class VarsModule(BaseVarsPlugin):
 
         # authenticated = False
         # v_client = None
+
+        self.secret_root = os.environ.get(
+            'HASHIVAULT_VARS_SECRET_ROOT', "/secret/ansible")
 
     def _authenticate(self):
         """Authenticate with the vault and establish the client api"""
@@ -166,7 +172,7 @@ class VarsModule(BaseVarsPlugin):
             debug("get_vars not authenticated to vault, skipping vault lookups")
             return {}
         result = v_client.read(
-            path="secret/ansible/%s" % (key)
+            path="%s/%s" % (self.secret_root, key)
         )
         debug("_read_vault result:", result)
         data = {}
